@@ -61,7 +61,7 @@
                 "input": "projects/shell/public"
               }
             ],
-            "styles": ["projects/shell/src/styles.scss"],
+            "styles": ["projects/shell/src/styles.scss", "projects/shell/src/material-theme.scss"],
             "polyfills": ["es-module-shims"]
           },
           "configurations": {
@@ -160,7 +160,7 @@
                 "input": "projects/mfe-requests/public"
               }
             ],
-            "styles": ["projects/mfe-requests/src/styles.scss"],
+            "styles": ["projects/mfe-requests/src/styles.scss", "projects/mfe-requests/src/material-theme.scss"],
             "polyfills": ["es-module-shims"]
           },
           "configurations": {
@@ -259,7 +259,7 @@
                 "input": "projects/mfe-approvals/public"
               }
             ],
-            "styles": ["projects/mfe-approvals/src/styles.scss"],
+            "styles": ["projects/mfe-approvals/src/styles.scss", "projects/mfe-approvals/src/material-theme.scss"],
             "polyfills": ["es-module-shims"]
           },
           "configurations": {
