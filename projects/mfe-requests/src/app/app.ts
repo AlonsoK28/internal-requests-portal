@@ -16,7 +16,7 @@ import { DataTableComponent, RequestColumn, RequestListStore, RequestStatus, Req
 })
 export class App {
   protected readonly list = inject(RequestListStore);
-  protected readonly columns: RequestColumn[] = ['id', 'type', 'requesterName', 'createdAt', 'status'];
+  protected readonly columns: RequestColumn[] = ['id', 'title', 'type', 'requesterName', 'createdAt', 'status'];
 
   constructor() { this.list.start(); }
 

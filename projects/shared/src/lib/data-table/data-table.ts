@@ -5,7 +5,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { ApiRequest } from '../api/api.models';
 
-export type RequestColumn = 'id' | 'type' | 'requesterName' | 'createdAt' | 'status' | 'actions';
+export type RequestColumn = 'id' | 'title' | 'type' | 'requesterName' | 'createdAt' | 'status' | 'actions';
 export type TableAction = { kind: 'approve' | 'reject'; request: ApiRequest };
 
 @Component({

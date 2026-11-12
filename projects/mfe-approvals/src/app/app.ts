@@ -17,7 +17,7 @@ import { DataTableComponent, RequestColumn, RequestListStore, RequestStatus, Req
 export class App {
   protected readonly list = inject(RequestListStore);
   private readonly api = inject(RequestsApiService);
-  protected readonly columns: RequestColumn[] = ['id', 'type', 'requesterName', 'createdAt', 'status', 'actions'];
+  protected readonly columns: RequestColumn[] = ['id', 'title', 'type', 'requesterName', 'createdAt', 'status', 'actions'];
   protected readonly decisionError = signal('');
   protected readonly decidingId = signal<number | null>(null);
 
