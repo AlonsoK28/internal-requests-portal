@@ -5,6 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { AuthApiService, SessionStore } from 'shared';
 import { Login } from './components/login/login';
+import { AccessNotice } from './access-notice';
 
 @Component({
   imports: [Login, MatButtonModule, MatProgressSpinnerModule, MatToolbarModule, RouterOutlet, RouterLink],
@@ -15,6 +16,7 @@ import { Login } from './components/login/login';
 export class App {
   private readonly authApi = inject(AuthApiService);
   protected readonly session = inject(SessionStore);
+  protected readonly accessNotice = inject(AccessNotice);
   protected readonly loggingOut = signal(false);
 
   protected logout(): void {

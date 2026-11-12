@@ -1,19 +1,33 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+
+// ng material
+import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { AuthApiService, SessionStore } from 'shared';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute, Router } from '@angular/router';
+
+// ng forms
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+
+// shared
+import { AuthApiService, SessionStore } from 'shared';
 import { allowedDestination, landingPath } from 'shared';
-import { A11yModule } from '@angular/cdk/a11y';
+
+
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
-  imports: [MatInputModule, MatIconModule, MatFormFieldModule, ReactiveFormsModule, MatButtonModule, MatProgressSpinnerModule, A11yModule],
+  imports: [
+    MatIconModule,
+    MatInputModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatProgressSpinnerModule
+  ],
   selector: 'app-login',
   styleUrl: './login.scss',
   templateUrl: './login.html',

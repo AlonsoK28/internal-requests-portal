@@ -13,5 +13,8 @@
         </button>
     }
 </mat-toolbar>
+@if (accessNotice.message()) {
+    <p role="alert">{{ accessNotice.message() }}</p>
+}
 <app-login></app-login>
 <router-outlet></router-outlet>

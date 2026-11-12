@@ -4,6 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { API_BASE_URL, SessionStore } from 'shared';
 import { App } from './app';
+import { AccessNotice } from './access-notice';
 
 describe('App', () => {
   beforeEach(async () => {
@@ -42,5 +43,13 @@ describe('App', () => {
     fixture.detectChanges();
     expect(session.isAuthenticated()).toBe(false);
     expect(fixture.nativeElement.querySelector('button[type="button"]')).toBeNull();
+  });
+
+  it('announces access denied without changing the page', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    TestBed.inject(AccessNotice).deny();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[role="alert"]')?.textContent).toContain('Acceso denegado');
   });
 });

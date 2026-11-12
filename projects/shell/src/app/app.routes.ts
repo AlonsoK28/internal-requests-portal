@@ -23,5 +23,6 @@ export const routes: Routes = [
         canMatch: [approvalsGuard],
         loadComponent: () => loadFederatedComponent('mfe-approvals')
     },
+    { path: 'login', component: EmptyRoute },
     { path: '', pathMatch: 'full', component: EmptyRoute, canMatch: [homeGuard] }
 ];

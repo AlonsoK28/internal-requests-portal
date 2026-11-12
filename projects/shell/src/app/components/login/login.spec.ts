@@ -19,7 +19,8 @@ describe('Login', () => {
     await TestBed.configureTestingModule({
       imports: [Login],
       providers: [provideHttpClient(), provideHttpClientTesting(),
-        provideRouter([{ path: 'requests', component: TestPage }, { path: 'approvals', component: TestPage }]),
+        provideRouter([{ path: 'requests', component: TestPage }, { path: 'approvals', component: TestPage },
+          { path: 'login', component: TestPage }]),
         { provide: API_BASE_URL, useValue: 'https://api.test' }],
     }).compileComponents();
     fixture = TestBed.createComponent(Login);
@@ -58,6 +59,19 @@ describe('Login', () => {
     });
     await fixture.whenStable();
     expect(TestBed.inject(Router).url).toBe('/approvals');
+  });
+
+  it('returns to the requested URL after login', async () => {
+    await TestBed.inject(Router).navigateByUrl('/login?returnUrl=%2Frequests%3Ftab%3Dopen');
+    fixture.componentInstance.email.setValue('ana@demo.com');
+    fixture.componentInstance.password.setValue('Demo123!');
+    fixture.nativeElement.querySelector('button[type="submit"]').click();
+    http.expectOne('https://api.test/auth/login').flush({
+      token: 'token', expiresAt: new Date(Date.now() + 900_000).toISOString(),
+      user: { id: 1, name: 'Ana', email: 'ana@demo.com', role: 'employee', department: 'Finanzas' },
+    });
+    await fixture.whenStable();
+    expect(TestBed.inject(Router).url).toBe('/requests?tab=open');
   });
 
   it('does not submit invalid fields', () => {
