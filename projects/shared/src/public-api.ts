@@ -10,3 +10,5 @@ export * from './lib/api/auth-api.service';
 export * from './lib/api/requests-api.service';
 export * from './lib/session/session.store';
 export * from './lib/session/role.guard';
+export * from './lib/data-table/data-table';
+export * from './lib/request-list/request-list.store';

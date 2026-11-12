@@ -1,23 +1,19 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { of } from 'rxjs';
+import { RequestsApiService } from 'shared';
 import { App } from './app';
 
 describe('App', () => {
-  beforeEach(async () => {
+  it('loads the requests list', async () => {
+    const list = vi.fn().mockReturnValue(of({ items: [], totalCount: 0 }));
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [provideRouter([]), { provide: RequestsApiService, useValue: { list } }],
     }).compileComponents();
-  });
-
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it('should render request content', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('mat-card-title')?.textContent).toContain('Shiba Inu');
+    expect(list).toHaveBeenCalledWith(expect.objectContaining({ _page: 1, _limit: 10 }));
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('No se encontraron solicitudes.');
   });
 });

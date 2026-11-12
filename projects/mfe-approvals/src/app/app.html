@@ -1,15 +1,33 @@
-<mat-form-field>
-  <mat-label>Input</mat-label>
-  <input matInput>
-</mat-form-field>
-<mat-form-field>
-  <mat-label>Select</mat-label>
-  <mat-select>
-    <mat-option value="one">First option</mat-option>
-    <mat-option value="two">Second option</mat-option>
-  </mat-select>
-</mat-form-field>
-<mat-form-field>
-  <mat-label>Textarea</mat-label>
-  <textarea matInput></textarea>
-</mat-form-field>
+<section class="request-list" aria-labelledby="approvals-heading">
+    <h1 id="approvals-heading">Aprobaciones</h1>
+    <div class="filters">
+        <mat-form-field appearance="outline">
+            <mat-label>Buscar solicitudes</mat-label>
+            <input matInput type="search" [value]="list.search()" (input)="onSearch($event)" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select [value]="list.status()" (valueChange)="onStatus($event)">
+                <mat-option value="pending">Pendiente</mat-option>
+                <mat-option value="approved">Aprobada</mat-option>
+                <mat-option value="rejected">Rechazada</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select [value]="list.type()" (valueChange)="onType($event)">
+                <mat-option value="">Todos</mat-option>
+                <mat-option value="equipment">Equipo</mat-option>
+                <mat-option value="access">Acceso</mat-option>
+                <mat-option value="travel">Viaje</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    @if (decisionError()) {
+        <p role="alert">{{ decisionError() }}</p>
+    }
+    <lib-data-table [data]="list.items()" [columns]="columns" [loading]="list.loading() || decidingId() !== null" [error]="list.error()" (retry)="list.retry()" (action)="onAction($event)" />
+    @if (!list.error()) {
+        <mat-paginator [length]="list.totalCount() ?? 0" [pageIndex]="list.page() - 1" [pageSize]="list.limit()" [pageSizeOptions]="[10, 25, 50]" (page)="onPage($event)" aria-label="Páginas de aprobaciones" />
+    }
+</section>
