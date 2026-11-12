@@ -1,18 +1,27 @@
 import { loadRemoteModule } from '@angular-architects/native-federation';
 import { Routes } from '@angular/router';
+import { Component, enableProdMode } from '@angular/core';
+import { approvalsGuard, homeGuard, requestsGuard } from 'shared';
+
+@Component({ template: '' })
+class EmptyRoute {}
+
+function loadFederatedComponent(remoteName: string) {
+    // Development remote bundles reference ngDevMode directly; initialize it when the host does not.
+    if (typeof ngDevMode === 'undefined') enableProdMode();
+    return loadRemoteModule(remoteName, './Component').then(m => m.App);
+}
 
 export const routes: Routes = [
     {
-        path: 'request',
-        loadComponent: () => loadRemoteModule('mfe-requests', './Component').then(m => m.App)
+        path: 'requests',
+        canMatch: [requestsGuard],
+        loadComponent: () => loadFederatedComponent('mfe-requests')
     },
     {
         path: 'approvals',
-        loadComponent: () => loadRemoteModule('mfe-approvals', './Component').then(m => m.App)
+        canMatch: [approvalsGuard],
+        loadComponent: () => loadFederatedComponent('mfe-approvals')
     },
-    {
-        path: '',
-        redirectTo: 'request',
-        pathMatch: 'full'
-    }
+    { path: '', pathMatch: 'full', component: EmptyRoute, canMatch: [homeGuard] }
 ];

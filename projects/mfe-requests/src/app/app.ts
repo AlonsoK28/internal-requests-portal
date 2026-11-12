@@ -9,15 +9,21 @@ import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 @Component({
   imports: [
-    RouterOutlet,
     MatCardModule,
     MatChipsModule,
     MatSlideToggle
   ],
-  selector: 'app-root',
+  selector: 'app-requests',
   styleUrl: './app.scss',
   templateUrl: './app.html',
 })
 export class App {
   protected readonly title = signal('mfe-requests');
 }
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet],
+  template: '<router-outlet />',
+})
+export class Root {}

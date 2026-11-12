@@ -8,15 +8,21 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   imports: [
-    RouterOutlet,
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule
   ],
-  selector: 'app-root',
+  selector: 'app-approvals',
   styleUrl: './app.scss',
   templateUrl: './app.html',
 })
 export class App {
   protected readonly title = signal('mfe-approvals');
 }
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet],
+  template: '<router-outlet />',
+})
+export class Root {}

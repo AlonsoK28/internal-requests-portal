@@ -1,0 +1,78 @@
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { API_BASE_URL, SessionStore } from 'shared';
+import { provideRouter, Router } from '@angular/router';
+import { Login } from './login';
+
+@Component({ template: '' })
+class TestPage {}
+
+describe('Login', () => {
+  let fixture: ComponentFixture<Login>;
+  let http: HttpTestingController;
+  let session: SessionStore;
+
+  beforeEach(async () => {
+    sessionStorage.clear();
+    await TestBed.configureTestingModule({
+      imports: [Login],
+      providers: [provideHttpClient(), provideHttpClientTesting(),
+        provideRouter([{ path: 'requests', component: TestPage }, { path: 'approvals', component: TestPage }]),
+        { provide: API_BASE_URL, useValue: 'https://api.test' }],
+    }).compileComponents();
+    fixture = TestBed.createComponent(Login);
+    http = TestBed.inject(HttpTestingController);
+    session = TestBed.inject(SessionStore);
+    await fixture.whenStable();
+  });
+
+  afterEach(() => { http.verify(); session.clear(); });
+
+  it('submits valid credentials and shows the authenticated user', async () => {
+    fixture.componentInstance.email.setValue('ana@demo.com');
+    fixture.componentInstance.password.setValue('Demo123!');
+    fixture.nativeElement.querySelector('button[type="submit"]').click();
+    const call = http.expectOne('https://api.test/auth/login');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('button[type="submit"]').classList.contains('mat-mdc-button-progress-indicator-shown')).toBe(true);
+    expect(call.request.body).toEqual({ email: 'ana@demo.com', password: 'Demo123!' });
+    call.flush({ token: 'token', expiresAt: new Date(Date.now() + 900_000).toISOString(),
+      user: { id: 1, name: 'Ana', email: 'ana@demo.com', role: 'employee', department: 'Finanzas' } });
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(session.isAuthenticated()).toBe(true);
+    expect(TestBed.inject(Router).url).toBe('/requests');
+    expect(fixture.nativeElement.querySelector('.session-name')?.textContent).toContain('Ana');
+    expect(fixture.nativeElement.querySelector('[role="status"]')?.textContent).toContain('(employee)');
+  });
+
+  it('sends approvers to approvals after login', async () => {
+    fixture.componentInstance.email.setValue('ana@demo.com');
+    fixture.componentInstance.password.setValue('Demo123!');
+    fixture.nativeElement.querySelector('button[type="submit"]').click();
+    http.expectOne('https://api.test/auth/login').flush({
+      token: 'token', expiresAt: new Date(Date.now() + 900_000).toISOString(),
+      user: { id: 1, name: 'Ana', email: 'ana@demo.com', role: 'approver', department: 'Finanzas' },
+    });
+    await fixture.whenStable();
+    expect(TestBed.inject(Router).url).toBe('/approvals');
+  });
+
+  it('does not submit invalid fields', () => {
+    fixture.nativeElement.querySelector('button[type="submit"]').click();
+    http.expectNone('https://api.test/auth/login');
+    expect(fixture.componentInstance.email.touched).toBe(true);
+  });
+
+  it('shows a credentials error after a 401 response', async () => {
+    fixture.componentInstance.email.setValue('ana@demo.com');
+    fixture.componentInstance.password.setValue('incorrecta');
+    fixture.nativeElement.querySelector('button[type="submit"]').click();
+    http.expectOne('https://api.test/auth/login').flush({}, { status: 401, statusText: 'Unauthorized' });
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[role="alert"]').textContent).toContain('Correo o contraseña incorrectos.');
+  });
+});

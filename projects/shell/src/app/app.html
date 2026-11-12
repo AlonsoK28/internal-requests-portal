@@ -1,5 +1,17 @@
-<nav>
-    <a routerLink="request">Solicitudes</a>
-    <a routerLink="approvals">Aprovaciones</a>
-</nav>
+<mat-toolbar>
+    <span class="toolbar-title">Portal de solicitudes</span>
+    @if (session.isAuthenticated()) {
+        <nav aria-label="Navegación principal">
+            <a matButton routerLink="/requests">Solicitudes</a>
+            @if (session.role() === 'approver') {
+                <a matButton routerLink="/approvals">Aprobaciones</a>
+            }
+        </nav>
+        <button matButton="tonal" type="button" [disabled]="loggingOut()" [showProgress]="loggingOut()" (click)="logout()">
+            Cerrar sesión
+            <mat-spinner progressIndicator [diameter]="20" aria-label="Cerrando sesión" />
+        </button>
+    }
+</mat-toolbar>
+<app-login></app-login>
 <router-outlet></router-outlet>

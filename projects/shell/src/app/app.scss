@@ -1,0 +1,19 @@
+mat-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  height: auto;
+  min-height: 4rem;
+  padding-block: 0.5rem;
+}
+
+.toolbar-title {
+  font-weight: 600;
+  margin-right: auto;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}

@@ -1,0 +1,45 @@
+<div class="example-container">
+    <h1>Iniciar sesión</h1>
+    @if (session.isAuthenticated()) {
+        <p role="status">
+            Sesión iniciada como
+            <span class="session-name">{{ session.user()?.name }}</span>. <span class="my-role">({{ session.role() }})</span>
+        </p>
+    } @else {
+        <form (submit)="$event.preventDefault(); login()">
+            <mat-form-field>
+                <mat-label>Correo electrónico</mat-label>
+                <input #emailInput matInput type="email" autocomplete="username" [formControl]="email" required autofocus />
+                @if (emailInput.value) {
+                    <button matSuffix matIconButton aria-label="Clear" (click)="email.setValue('')" tabIndex="-1">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                }
+                @if (email.touched && email.hasError('required')) {
+                    <mat-error>Ingresa tu correo electrónico.</mat-error>
+                } @else if (email.touched && email.hasError('email')) {
+                    <mat-error>Ingresa un correo electrónico válido.</mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Contraseña</mat-label>
+                <input #passwordInput matInput type="password" autocomplete="current-password" [formControl]="password" required />
+                @if (passwordInput.value) {
+                    <button matSuffix matIconButton aria-label="Clear" (click)="password.setValue('')" tabIndex="-1">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                }
+                @if (password.touched && password.hasError('required')) {
+                    <mat-error>Ingresa tu contraseña.</mat-error>
+                }
+            </mat-form-field>
+            @if (errorMessage()) {
+                <p role="alert">{{ errorMessage() }}</p>
+            }
+            <button matButton="tonal" type="submit" [disabled]="submitting()" [showProgress]="submitting()">
+                Iniciar sesión
+                <mat-spinner progressIndicator [diameter]="20" aria-label="Iniciando sesión" />
+            </button>
+        </form>
+    }
+</div>

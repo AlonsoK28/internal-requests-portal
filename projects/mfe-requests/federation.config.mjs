@@ -1,6 +1,7 @@
 import {
   withNativeFederation,
   fromPackageJson,
+  mappingsFromWorkspace,
 } from '@angular-architects/native-federation/config';
 
 export default withNativeFederation({
@@ -19,7 +20,7 @@ export default withNativeFederation({
     build: 'package',
   }).patch(['@angular/*'], { includeSecondaries: { keepAll: true } }),
 
-  //sharedMappings: mappingsFromWorkspace({ singleton: true }).filter(['@my-org/*']).get(),
+  sharedMappings: mappingsFromWorkspace({ singleton: true }).only(['shared']).get(),
 
   skip: ['@angular/cdk/schematics', 'rxjs/ajax', 'rxjs/fetch', 'rxjs/testing', 'rxjs/webSocket'],
 
@@ -30,5 +31,6 @@ export default withNativeFederation({
     denseChunking: true,
     denseExternals: true,
     strictImports: false,
+    ignoreUnusedDeps: false,
   },
 });

@@ -1,0 +1,18 @@
+.example-container {
+  max-width: 28rem;
+  width: 100%;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.my-role{
+  color: var(--mat-sys-primary);
+}
