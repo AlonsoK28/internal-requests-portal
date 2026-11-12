@@ -1,3 +1,15 @@
+:host {
+  display: grid;
+  flex: 1;
+  place-items: center;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+:host.authenticated {
+  display: none;
+}
+
 .example-container {
   max-width: 28rem;
   width: 100%;

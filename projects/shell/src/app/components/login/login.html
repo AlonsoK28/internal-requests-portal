@@ -11,7 +11,7 @@
                 <mat-label>Correo electrónico</mat-label>
                 <input #emailInput matInput type="email" autocomplete="username" [formControl]="email" required autofocus />
                 @if (emailInput.value) {
-                    <button matSuffix matIconButton aria-label="Clear" (click)="email.setValue('')" tabIndex="-1">
+                    <button matSuffix matIconButton type="button" aria-label="Borrar correo electrónico" (click)="email.setValue('')" tabIndex="-1">
                         <mat-icon>close</mat-icon>
                     </button>
                 }
@@ -25,7 +25,7 @@
                 <mat-label>Contraseña</mat-label>
                 <input #passwordInput matInput type="password" autocomplete="current-password" [formControl]="password" required />
                 @if (passwordInput.value) {
-                    <button matSuffix matIconButton aria-label="Clear" (click)="password.setValue('')" tabIndex="-1">
+                    <button matSuffix matIconButton type="button" aria-label="Borrar contraseña" (click)="password.setValue('')" tabIndex="-1">
                         <mat-icon>close</mat-icon>
                     </button>
                 }

@@ -44,9 +44,13 @@ describe('Login', () => {
     await fixture.whenStable();
     fixture.detectChanges();
     expect(session.isAuthenticated()).toBe(true);
-    expect(TestBed.inject(Router).url).toBe('/requests');
     expect(fixture.nativeElement.querySelector('.session-name')?.textContent).toContain('Ana');
     expect(fixture.nativeElement.querySelector('[role="status"]')?.textContent).toContain('(employee)');
+    expect(fixture.componentInstance.email.value).toBe('');
+    session.clear();
+    fixture.detectChanges();
+    expect((fixture.nativeElement.querySelector('input[type="email"]') as HTMLInputElement).value).toBe('');
+    expect(TestBed.inject(Router).url).toBe('/requests');
   });
 
   it('sends approvers to approvals after login', async () => {
@@ -78,6 +82,19 @@ describe('Login', () => {
     fixture.nativeElement.querySelector('button[type="submit"]').click();
     http.expectNone('https://api.test/auth/login');
     expect(fixture.componentInstance.email.touched).toBe(true);
+  });
+
+  it('submits from the password field without clearing the email', () => {
+    fixture.componentInstance.email.setValue('ana@demo.com');
+    fixture.componentInstance.password.setValue('Demo123!');
+    fixture.detectChanges();
+    const form = fixture.nativeElement.querySelector('form') as HTMLFormElement;
+    expect(form.querySelectorAll('button:not([type])')).toHaveLength(0);
+    form.requestSubmit();
+    expect(fixture.componentInstance.email.value).toBe('ana@demo.com');
+    const request = http.expectOne('https://api.test/auth/login');
+    expect(request.request.body).toEqual({ email: 'ana@demo.com', password: 'Demo123!' });
+    request.flush({}, { status: 401, statusText: 'Unauthorized' });
   });
 
   it('shows a credentials error after a 401 response', async () => {

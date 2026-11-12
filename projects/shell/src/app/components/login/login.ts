@@ -20,6 +20,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
+  host: { '[class.authenticated]': 'session.isAuthenticated()' },
   imports: [
     MatIconModule,
     MatInputModule,
@@ -55,6 +56,7 @@ export class Login {
     this.submitting.set(true);
     this.authApi.login({ email: this.email.value.trim(), password: this.password.value }).subscribe({
       next: () => {
+        this.email.reset();
         this.password.reset();
         this.submitting.set(false);
         const role = this.session.role();
