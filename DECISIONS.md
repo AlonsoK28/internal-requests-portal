@@ -28,5 +28,8 @@
 - se inicializa `playwright` en el proyecto
     - opinion: se inicializa la configuración de `playwright` en el proyecto para posteriormente continuar con las pruebas `e2e`
 
+- manejo de `http 409` en `/approvals`
+    > notas: inicialmente podía reproducir el error 409, cuando no tenía filtros para las acciones de la <data-table>, ya que en la implementación quedó que la columna de acciones sólo se muestra cuando el estatus es igual a pendiente, sin embargo también implemente el manejo de la notificación de este caso (http 409), cuando una petición ya fue aprobada y este comportamiento está en `projects/shared/src/lib/conflict-dialog`
+
 ## TODOS:
 - implementación de i18n con https://ngx-translate.org/getting-started/angular-compatibility/#supported-versions
