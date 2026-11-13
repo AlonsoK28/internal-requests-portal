@@ -4,6 +4,7 @@ initFederation(
   {},
   {
     hostRemoteEntry: { url: './remoteEntry.json' },
+    sse: true,
   },
 )
   .catch((err) => console.error(err))

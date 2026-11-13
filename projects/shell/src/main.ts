@@ -6,6 +6,7 @@ angularGlobal.ngDevMode ??= true;
 
 initFederation('federation.manifest.json', {
   hostRemoteEntry: { url: './remoteEntry.json' },
+  sse: true,
 })
   .catch((err) => console.error(err))
   .then((_) => import('./bootstrap'))

@@ -41,6 +41,7 @@
             "tsConfig": "projects/shell/tsconfig.federation.json",
             "rebuildDelay": 500,
             "cacheExternalArtifacts": true,
+            "buildNotifications": { "enable": true },
             "dev": true,
             "devServer": true,
             "port": 0
@@ -140,6 +141,7 @@
             "tsConfig": "projects/mfe-requests/tsconfig.federation.json",
             "rebuildDelay": 500,
             "cacheExternalArtifacts": true,
+            "buildNotifications": { "enable": true },
             "dev": true,
             "devServer": true,
             "port": 0
@@ -239,6 +241,7 @@
             "tsConfig": "projects/mfe-approvals/tsconfig.federation.json",
             "rebuildDelay": 500,
             "cacheExternalArtifacts": true,
+            "buildNotifications": { "enable": true },
             "dev": true,
             "devServer": true,
             "port": 0
