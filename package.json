@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test:e2e": "playwright test",
     "run-env-macos": "npx ng serve shell & npx ng serve mfe-requests & npx ng serve mfe-approvals & wait"
   },
   "private": true,
@@ -29,6 +30,7 @@
     "@angular/build": "^22.2.6",
     "@angular/cli": "^22.2.6",
     "@angular/compiler-cli": "^22.2.0",
+    "@playwright/test": "^1.65.0",
     "@softarc/native-federation-orchestrator": "^4.10.0",
     "jsdom": "^30.0.0",
     "ng-packagr": "^22.2.0",
