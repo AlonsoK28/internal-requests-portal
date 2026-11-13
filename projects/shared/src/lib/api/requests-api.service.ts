@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import { API_BASE_URL } from './api.config';
 import { SessionStore } from '../session/session.store';
 import { normalizeRequest } from './amount';
+import { CatalogType, normalizeCatalogTypes } from './catalog-types';
 import { ApiRequest, CreateRequest, RequestDecision, RequestPage, RequestQuery } from './api.models';
 
 @Injectable({ providedIn: 'root' })
@@ -37,8 +38,8 @@ export class RequestsApiService {
     return this.http.patch<ApiRequest>(`${this.baseUrl}/requests/${id}`, decision, { headers: this.headers() }).pipe(map(normalizeRequest));
   }
 
-  types(): Observable<unknown> {
-    return this.http.get<unknown>(`${this.baseUrl}/catalog/types`, { headers: this.headers() });
+  types(): Observable<CatalogType[]> {
+    return this.http.get<unknown>(`${this.baseUrl}/catalog/types`, { headers: this.headers() }).pipe(map(normalizeCatalogTypes));
   }
 
   private headers(): HttpHeaders {

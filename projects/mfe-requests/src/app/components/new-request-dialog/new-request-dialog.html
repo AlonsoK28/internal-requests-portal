@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>Nueva solicitud</h2>
+<div mat-dialog-content>
+    @if (loading()) { <p>Cargando tipos de solicitud…</p> }
+    @if (loadingError()) {
+        <p role="alert">No se pudo cargar el catálogo.</p>
+        <button mat-button type="button" (click)="load()">Reintentar</button>
+    }
+    @if (!loading() && !loadingError()) {
+        <form id="new-request-form" [formGroup]="form" (ngSubmit)="submit()">
+            <mat-form-field appearance="outline">
+                <mat-label>Tipo de solicitud</mat-label>
+                <mat-select formControlName="type" (valueChange)="selectType($event)">
+                    @for (item of catalog(); track item.id) {
+                        <mat-option [value]="item.id">{{ item.name }} — {{ item.description }}</mat-option>
+                    }
+                </mat-select>
+                @if (error('type')) { <mat-error>{{ error('type') }}</mat-error> }
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Título</mat-label>
+                <input matInput formControlName="title" />
+                @if (error('title')) { <mat-error>{{ error('title') }}</mat-error> }
+            </mat-form-field>
+            @if (has('model')) { <mat-form-field appearance="outline"><mat-label>Modelo</mat-label><input matInput formControlName="model" />@if (error('model')) { <mat-error>{{ error('model') }}</mat-error> }</mat-form-field> }
+            @if (has('system')) { <mat-form-field appearance="outline"><mat-label>Sistema</mat-label><input matInput formControlName="system" />@if (error('system')) { <mat-error>{{ error('system') }}</mat-error> }</mat-form-field> }
+            @if (has('justification')) { <mat-form-field appearance="outline"><mat-label>Justificación</mat-label><textarea matInput formControlName="justification"></textarea>@if (error('justification')) { <mat-error>{{ error('justification') }}</mat-error> }</mat-form-field> }
+            @if (has('destination')) { <mat-form-field appearance="outline"><mat-label>Destino</mat-label><input matInput formControlName="destination" />@if (error('destination')) { <mat-error>{{ error('destination') }}</mat-error> }</mat-form-field> }
+            @if (has('startDate')) { <mat-form-field appearance="outline"><mat-label>Fecha de inicio</mat-label><input matInput type="date" formControlName="startDate" />@if (error('startDate')) { <mat-error>{{ error('startDate') }}</mat-error> }</mat-form-field> }
+            @if (has('endDate')) { <mat-form-field appearance="outline"><mat-label>Fecha de fin</mat-label><input matInput type="date" formControlName="endDate" />@if (error('endDate')) { <mat-error>{{ error('endDate') }}</mat-error> }</mat-form-field> }
+            @if (form.hasError('dateOrder') && form.controls.endDate.touched) { <p role="alert">La fecha de fin debe ser igual o posterior a la fecha de inicio.</p> }
+            @if (has('amount')) { <mat-form-field appearance="outline"><mat-label>Monto (máximo {{ selected()?.amount }})</mat-label><input matInput type="number" min="0.01" step="0.01" [max]="selected()?.amount ?? null" formControlName="amount" />@if (error('amount')) { <mat-error>{{ error('amount') }}</mat-error> }</mat-form-field> }
+            @if (submitError()) { <p role="alert">{{ submitError() }}</p> }
+        </form>
+    }
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-button type="button" [disabled]="sending()" (click)="dialog.close()">Cancelar</button>
+    <button mat-flat-button type="submit" form="new-request-form" [disabled]="loading() || loadingError() || sending()">{{ sending() ? 'Enviando…' : 'Crear solicitud' }}</button>
+</div>

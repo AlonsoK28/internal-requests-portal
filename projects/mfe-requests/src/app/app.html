@@ -1,5 +1,8 @@
 <section class="request-list" aria-labelledby="requests-heading">
-    <h1 id="requests-heading">Solicitudes <mat-icon>docs</mat-icon></h1>
+    <div class="title-container">
+        <h1 id="requests-heading">Solicitudes <mat-icon>docs</mat-icon></h1>
+        <button matFab extended type="button" (click)="newRequest()"><mat-icon>add</mat-icon>Nueva solicitud</button>
+    </div>
     <div class="filters">
         <mat-form-field appearance="outline">
             <mat-label>Buscar solicitudes</mat-label>

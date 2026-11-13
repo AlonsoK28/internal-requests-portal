@@ -1,4 +1,6 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterOutlet } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,6 +9,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { DataTableComponent, RequestColumn, RequestListStore, RequestStatus, RequestType } from 'shared';
+import { NewRequestDialog } from './components/new-request-dialog/new-request-dialog';
 
 @Component({
   selector: 'app-requests',
@@ -17,7 +20,8 @@ import { DataTableComponent, RequestColumn, RequestListStore, RequestStatus, Req
     MatOptionModule, 
     MatSelectModule, 
     MatPaginatorModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule,
   ],
   providers: [RequestListStore],
   templateUrl: './app.html',
@@ -25,6 +29,7 @@ import { DataTableComponent, RequestColumn, RequestListStore, RequestStatus, Req
 })
 export class App {
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
   protected readonly list = inject(RequestListStore);
   protected readonly columns: RequestColumn[] = ['id', 'title', 'type', 'requesterName', 'createdAt', 'status'];
 
@@ -50,6 +55,16 @@ export class App {
 
   protected navigateToDetails(id: number): void { 
     void this.router.navigate(['/requests', id]); 
+  }
+
+  protected newRequest(): void {
+    this.dialog.open(NewRequestDialog, { width: '36rem', maxWidth: '95vw', autoFocus: 'first-tabbable' })
+      .afterClosed().subscribe(created => {
+        if (created) {
+          this.list.retry();
+          void this.router.navigate(['/requests']);
+        }
+      });
   }
 }
 
