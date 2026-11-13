@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,13 +28,29 @@ export class App {
   protected readonly list = inject(RequestListStore);
   protected readonly columns: RequestColumn[] = ['id', 'title', 'type', 'requesterName', 'createdAt', 'status'];
 
-  constructor() { this.list.start(); }
+  constructor() { 
+    this.list.start();
+  }
 
-  protected onSearch(event: Event): void { this.list.setSearch((event.target as HTMLInputElement).value); }
-  protected onStatus(value: RequestStatus | ''): void { this.list.setStatus(value); }
-  protected onType(value: RequestType | ''): void { this.list.setType(value); }
-  protected onPage(event: PageEvent): void { this.list.setPage(event.pageIndex, event.pageSize); }
-  protected navigateToDetails(id: number): void { void this.router.navigate(['/requests', id]); }
+  protected onSearch(event: Event): void { 
+    this.list.setSearch((event.target as HTMLInputElement).value); 
+  }
+
+  protected onStatus(value: RequestStatus | ''): void { 
+    this.list.setStatus(value); 
+  }
+
+  protected onType(value: RequestType | ''): void { 
+    this.list.setType(value); 
+  }
+
+  protected onPage(event: PageEvent): void { 
+    this.list.setPage(event.pageIndex, event.pageSize); 
+  }
+
+  protected navigateToDetails(id: number): void { 
+    void this.router.navigate(['/requests', id]); 
+  }
 }
 
 export { RequestDetailComponent } from './request-detail/request-detail';

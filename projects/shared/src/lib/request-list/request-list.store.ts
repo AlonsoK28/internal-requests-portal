@@ -71,6 +71,17 @@ export class RequestListStore {
   }
   retry(): void { this.reload.next(); }
 
+  applyUpdatedRequest(updated: ApiRequest): void {
+    const current = this.items();
+    if (!current.some(item => item.id === updated.id)) return;
+    if (this.status() && updated.status !== this.status()) {
+      this.items.set(current.filter(item => item.id !== updated.id));
+      this.totalCount.update(count => count === null ? null : Math.max(0, count - 1));
+      return;
+    }
+    this.items.set(current.map(item => item.id === updated.id ? updated : item));
+  }
+
   private updateParams(params: Record<string, string | number | null>): void {
     void this.router.navigate([], { relativeTo: this.route, queryParams: params, queryParamsHandling: 'merge' });
   }

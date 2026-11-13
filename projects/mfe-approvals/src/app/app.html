@@ -26,7 +26,7 @@
     @if (decisionError()) {
         <p role="alert">{{ decisionError() }}</p>
     }
-    <lib-data-table [data]="list.items()" [columns]="columns" [loading]="list.loading() || decidingId() !== null" [error]="list.error()" (retry)="list.retry()" (action)="onAction($event)" />
+    <lib-data-table [data]="list.items()" [columns]="columns()" [loading]="list.loading()" [error]="list.error()" [busyId]="decidingId()" (retry)="list.retry()" (action)="onAction($event)" />
     @if (!list.error()) {
         <mat-paginator [length]="list.totalCount() ?? 0" [pageIndex]="list.page() - 1" [pageSize]="list.limit()" [pageSizeOptions]="[10, 25, 50]" (page)="onPage($event)" aria-label="Páginas de aprobaciones" />
     }

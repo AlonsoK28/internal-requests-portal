@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>La solicitud cambió</h2>
+<mat-dialog-content>
+    <p>{{ conflict.message || 'La solicitud fue modificada por otra persona.' }}</p>
+    <dl>
+        <dt>Solicitud</dt><dd>{{ conflict.current.title }} (ID {{ conflict.current.id }})</dd>
+        <dt>Estado actual</dt>
+        <dd>
+            @switch (conflict.current.status) {
+                @case ('pending') { Pendiente }
+                @case ('approved') { Aprobada }
+                @case ('rejected') { Rechazada }
+            }
+        </dd>
+        <dt>Versión actual</dt><dd>{{ conflict.current.version }}</dd>
+        @if (conflict.current.decidedBy !== undefined) {
+            <dt>Resuelta por</dt><dd>Usuario ID {{ conflict.current.decidedBy }}</dd>
+        }
+        @if (conflict.current.decidedAt) {
+            <dt>Fecha de resolución</dt><dd>{{ conflict.current.decidedAt | date: 'medium' }}</dd>
+        }
+        @if (conflict.current.decisionComment) {
+            <dt>Comentario</dt><dd>{{ conflict.current.decisionComment }}</dd>
+        }
+    </dl>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button matButton="filled" mat-dialog-close type="button">Entendido</button>
+</mat-dialog-actions>

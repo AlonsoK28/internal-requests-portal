@@ -1,14 +1,12 @@
 import { loadRemoteModule } from '@angular-architects/native-federation';
 import { Routes } from '@angular/router';
-import { Component, enableProdMode } from '@angular/core';
+import { Component } from '@angular/core';
 import { approvalsGuard, homeGuard, requestsGuard } from 'shared';
 
 @Component({ template: '' })
 class EmptyRoute {}
 
 function loadFederatedComponent(remoteName: string, componentName = 'App') {
-    // Development remote bundles reference ngDevMode directly; initialize it when the host does not.
-    if (typeof ngDevMode === 'undefined') enableProdMode();
     return loadRemoteModule(remoteName, './Component').then(m => m[componentName]);
 }
 

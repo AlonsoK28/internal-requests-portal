@@ -20,6 +20,7 @@ export class DataTableComponent {
   readonly loading = input(false);
   readonly error = input(false);
   readonly seeDetail = input(false);
+  readonly busyId = input<number | null>(null);
   readonly action = output<TableAction>();
   readonly detail = output<number>();
   readonly retry = output<void>();

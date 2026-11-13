@@ -37,6 +37,9 @@ export interface RequestBase<T extends RequestType, D> {
   version: number;
   details: D;
   amount?: number;
+  decidedBy?: number;
+  decidedAt?: string;
+  decisionComment?: string;
 }
 
 export type ApiRequest =
@@ -74,6 +77,7 @@ export interface ValidationError {
 }
 
 export interface VersionConflictError {
+  message?: string;
   code: 'VERSION_CONFLICT';
   current: ApiRequest;
 }

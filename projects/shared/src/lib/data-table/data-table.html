@@ -49,8 +49,8 @@
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef scope="col">Acciones</th>
                 <td mat-cell *matCellDef="let request">
-                    <button matButton type="button" [attr.aria-label]="'Aprobar solicitud ' + request.id" (click)="action.emit({ kind: 'approve', request })">Aprobar</button>
-                    <button matButton type="button" [attr.aria-label]="'Rechazar solicitud ' + request.id" (click)="action.emit({ kind: 'reject', request })">Rechazar</button>
+                    <button matButton type="button" [disabled]="busyId() !== null" [attr.aria-label]="'Aprobar solicitud ' + request.id" (click)="action.emit({ kind: 'approve', request })">Aprobar</button>
+                    <button matButton type="button" [disabled]="busyId() !== null" [attr.aria-label]="'Rechazar solicitud ' + request.id" (click)="action.emit({ kind: 'reject', request })">Rechazar</button>
                 </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
