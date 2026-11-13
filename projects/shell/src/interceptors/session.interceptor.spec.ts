@@ -2,11 +2,12 @@ import { HttpClient, HttpErrorResponse, provideHttpClient, withInterceptors } fr
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
 import { NavigationEnd, provideRouter, Router } from '@angular/router';
 import { filter, firstValueFrom } from 'rxjs';
 import { SessionStore } from 'shared';
-import { AccessNotice } from './access-notice';
-import { sessionInterceptor } from './session.interceptor';
+import { sessionInterceptor } from '../interceptors/session.interceptor';
+import { AccessNotice } from '../app/access-notice';
 
 @Component({ template: '' })
 class TestPage {}
@@ -17,11 +18,14 @@ describe('sessionInterceptor', () => {
   let session: SessionStore;
   let router: Router;
   let notice: AccessNotice;
+  let closeAll: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     sessionStorage.clear();
+    closeAll = vi.fn();
     TestBed.configureTestingModule({
       providers: [
+        { provide: MatDialog, useValue: { closeAll } },
         provideHttpClient(withInterceptors([sessionInterceptor])),
         provideHttpClientTesting(),
         provideRouter([
@@ -62,6 +66,7 @@ describe('sessionInterceptor', () => {
     await redirected;
     expect(receivedError).toBeInstanceOf(HttpErrorResponse);
     expect(session.isAuthenticated()).toBe(false);
+    expect(closeAll).toHaveBeenCalledOnce();
     expect(router.url).toBe('/login?returnUrl=%2Frequests%3Ftab%3Dopen');
   });
 
@@ -74,12 +79,14 @@ describe('sessionInterceptor', () => {
     expect(notice.message()).toContain('Acceso denegado');
     expect(router.url).toBe('/requests');
     expect(session.isAuthenticated()).toBe(true);
+    expect(closeAll).not.toHaveBeenCalled();
   });
 
   it('leaves invalid login responses to the login form', () => {
     client.post('/api/auth/login', {}).subscribe({ error: () => undefined });
     http.expectOne('/api/auth/login').flush({}, { status: 401, statusText: 'Unauthorized' });
     expect(session.isAuthenticated()).toBe(true);
+    expect(closeAll).not.toHaveBeenCalled();
     expect(router.url).toBe('/');
   });
 });
