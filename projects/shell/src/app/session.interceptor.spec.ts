@@ -62,7 +62,7 @@ describe('sessionInterceptor', () => {
     await redirected;
     expect(receivedError).toBeInstanceOf(HttpErrorResponse);
     expect(session.isAuthenticated()).toBe(false);
-    expect(router.url).toBe('/login');
+    expect(router.url).toBe('/login?returnUrl=%2Frequests%3Ftab%3Dopen');
   });
 
   it('shows an access denied message on a 403 without navigating', async () => {

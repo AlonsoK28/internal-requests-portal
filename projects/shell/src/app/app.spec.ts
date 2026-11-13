@@ -10,12 +10,18 @@ import { AccessNotice } from './access-notice';
 @Component({ template: '' })
 class EmptyRoute {}
 
+@Component({ template: '<table aria-label="Solicitudes"><tr><td>Dato protegido</td></tr></table>' })
+class ProtectedRoute {}
+
 describe('App', () => {
   beforeEach(async () => {
     sessionStorage.clear();
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([{ path: 'login', component: EmptyRoute }]),
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([
+        { path: 'login', component: EmptyRoute },
+        { path: 'approvals', component: ProtectedRoute },
+      ]),
         { provide: API_BASE_URL, useValue: 'https://api.test' }],
     }).compileComponents();
   });
@@ -70,5 +76,23 @@ describe('App', () => {
     TestBed.inject(AccessNotice).deny();
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('[role="alert"]')?.textContent).toContain('Acceso denegado');
+  });
+
+  it('removes protected content and returns to login when the session expires', async () => {
+    const session = TestBed.inject(SessionStore);
+    session.setSession({ token: 'token', expiresAt: new Date(Date.now() + 900_000).toISOString(),
+      user: { id: 1, name: 'Ana', email: 'ana@demo.com', role: 'approver', department: 'Finanzas' } });
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    await TestBed.inject(Router).navigateByUrl('/approvals?status=pending&q=audito');
+    await fixture.whenStable();
+    expect(fixture.nativeElement.querySelector('table')).not.toBeNull();
+
+    session.clear();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('table')).toBeNull();
+    await fixture.whenStable();
+    expect(TestBed.inject(Router).url)
+      .toBe('/login?returnUrl=%2Fapprovals%3Fstatus%3Dpending%26q%3Daudito');
   });
 });

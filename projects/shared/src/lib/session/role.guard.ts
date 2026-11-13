@@ -7,6 +7,19 @@ export function landingPath(role: UserRole): string {
   return role === 'approver' ? '/approvals' : '/requests';
 }
 
+export function allowedDestination(destination: string | null, role: UserRole): string | null {
+  if (!destination || !destination.startsWith('/') || destination.startsWith('//')) return null;
+  try {
+    const url = new URL(destination, 'https://local.invalid');
+    if (url.origin !== 'https://local.invalid') return null;
+    const feature = url.pathname.split('/')[1];
+    return feature === 'requests' || (feature === 'approvals' && role === 'approver')
+      ? destination : null;
+  } catch {
+    return null;
+  }
+}
+
 export function requireRoles(...roles: UserRole[]): CanMatchFn {
   return () => {
     const session = inject(SessionStore);

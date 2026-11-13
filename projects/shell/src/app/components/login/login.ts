@@ -13,7 +13,7 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 // shared
 import { AuthApiService, SessionStore } from 'shared';
-import { landingPath } from 'shared';
+import { allowedDestination, landingPath } from 'shared';
 
 
 import { Router } from '@angular/router';
@@ -60,7 +60,10 @@ export class Login {
         this.submitting.set(false);
         const role = this.session.role();
         if (role) {
-          void this.router.navigateByUrl(landingPath(role));
+          const requested = this.router.parseUrl(this.router.url).queryParams['returnUrl'];
+          const destination = allowedDestination(typeof requested === 'string' ? requested : null, role)
+            ?? landingPath(role);
+          void this.router.navigateByUrl(destination);
         }
       },
       error: (error: unknown) => {

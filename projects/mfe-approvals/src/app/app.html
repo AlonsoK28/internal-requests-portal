@@ -3,7 +3,7 @@
     <div class="filters">
         <mat-form-field appearance="outline">
             <mat-label>Buscar solicitudes</mat-label>
-            <input matInput type="search" [value]="list.search()" (input)="onSearch($event)" />
+            <input matInput type="search" [value]="list.search()" (input)="onSearch($event)" autofocus/>
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>Estado</mat-label>

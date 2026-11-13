@@ -17,4 +17,6 @@
     <p role="alert">{{ accessNotice.message() }}</p>
 }
 <app-login></app-login>
-<router-outlet></router-outlet>
+@if (session.isAuthenticated()) {
+    <router-outlet></router-outlet>
+}

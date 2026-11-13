@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -20,13 +20,30 @@ export class App {
   protected readonly session = inject(SessionStore);
   protected readonly accessNotice = inject(AccessNotice);
   protected readonly loggingOut = signal(false);
+  private wasAuthenticated = this.session.isAuthenticated();
+
+  constructor() {
+    effect(() => {
+      const authenticated = this.session.isAuthenticated();
+      if (this.wasAuthenticated && !authenticated && !this.loggingOut()) {
+        const destination = this.router.url;
+        if (destination.startsWith('/requests') || destination.startsWith('/approvals')) {
+          void this.router.navigate(['/login'], {
+            queryParams: { returnUrl: destination },
+            replaceUrl: true,
+          });
+        }
+      }
+      this.wasAuthenticated = authenticated;
+    });
+  }
 
   protected logout(): void {
     if (this.loggingOut()) return;
     this.loggingOut.set(true);
     this.authApi.logout().pipe(finalize(() => {
-      this.loggingOut.set(false);
-      void this.router.navigateByUrl('/login', { replaceUrl: true });
+      void this.router.navigateByUrl('/login', { replaceUrl: true })
+        .finally(() => this.loggingOut.set(false));
     })).subscribe({ error: () => undefined });
   }
 }
