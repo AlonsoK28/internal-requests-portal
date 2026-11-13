@@ -6,6 +6,8 @@
 - uso de angular material como framework del proyecto
     - opinion: se implementa angioma como framework implementación rápida y visual de los componentes de esta librería en el proyecto usando los ejemplos de la documentación
 
+    - uso de tema oscuro por preferencia personal, añadir toggle el tema posteriormente
+
 - uso de session storage para mantener la sesion hasta cerrar la pestaña o cerrar session manual:
 
     - opinion: Se implementó un servicio propio SessionStore utilizando Angular Signals, en lugar de NgRx SignalStore, debido al alcance reducido del estado global. 
@@ -30,6 +32,11 @@
 
 - manejo de `http 409` en `/approvals`
     > notas: inicialmente podía reproducir el error 409, cuando no tenía filtros para las acciones de la <data-table>, ya que en la implementación quedó que la columna de acciones sólo se muestra cuando el estatus es igual a pendiente, sin embargo también implemente el manejo de la notificación de este caso (http 409), cuando una petición ya fue aprobada y este comportamiento está en `projects/shared/src/lib/conflict-dialog`
+
+- pipeline de gh actions
+    - opinion: se integra pipeline en `github actions` con push en `main` que ejecuta las pruebas unitarias y las pruebas de `playwright`. 
+    
+    - Posteriormente genera release de gh y en un paso posterior, pudiera desplegar los `mfe` a un dominio como `vercel` o `netlify`
 
 ## TODOS:
 - implementación de i18n con https://ngx-translate.org/getting-started/angular-compatibility/#supported-versions
