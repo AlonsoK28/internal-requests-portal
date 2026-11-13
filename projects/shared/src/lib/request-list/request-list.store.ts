@@ -16,6 +16,7 @@ export class RequestListStore {
   private readonly destroyRef = inject(DestroyRef);
   private readonly searchChanges = new Subject<string>();
   private readonly reload = new Subject<void>();
+  private defaultStatus: RequestStatus | '' = '';
 
   readonly items = signal<readonly ApiRequest[]>([]);
   readonly totalCount = signal<number | null>(null);
@@ -28,6 +29,7 @@ export class RequestListStore {
   readonly type = signal<RequestType | ''>('');
 
   start(defaultStatus: RequestStatus | '' = ''): void {
+    this.defaultStatus = defaultStatus;
     if (defaultStatus && !this.route.snapshot.queryParamMap.has('status')) {
       void this.router.navigate([], { relativeTo: this.route, queryParams: { status: defaultStatus },
         queryParamsHandling: 'merge', replaceUrl: true });
@@ -46,7 +48,8 @@ export class RequestListStore {
         this.page.set(Number.isSafeInteger(page) && page > 0 ? page : 1);
         this.limit.set(Number.isSafeInteger(limit) && limit > 0 ? limit : 10);
         this.search.set(q);
-        this.status.set(statuses.includes(status as RequestStatus) ? status as RequestStatus : defaultStatus);
+        this.status.set(status === 'all' ? ''
+          : statuses.includes(status as RequestStatus) ? status as RequestStatus : defaultStatus);
         this.type.set(types.includes(type as RequestType) ? type as RequestType : '');
         return { _page: this.page(), _limit: this.limit(), q: q || undefined,
           status: this.status() || undefined, type: this.type() || undefined } satisfies RequestQuery;
@@ -64,7 +67,9 @@ export class RequestListStore {
   }
 
   setSearch(value: string): void { this.search.set(value); this.searchChanges.next(value.trim()); }
-  setStatus(value: RequestStatus | ''): void { this.updateParams({ status: value || null, _page: null }); }
+  setStatus(value: RequestStatus | ''): void {
+    this.updateParams({ status: value || (this.defaultStatus ? 'all' : null), _page: null });
+  }
   setType(value: RequestType | ''): void { this.updateParams({ type: value || null, _page: null }); }
   setPage(pageIndex: number, pageSize: number): void {
     this.updateParams({ _page: pageIndex + 1, _limit: pageSize });

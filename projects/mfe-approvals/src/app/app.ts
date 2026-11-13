@@ -46,8 +46,9 @@ export class App {
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   protected readonly columns = computed<readonly RequestColumn[]>(() => {
-    const base: RequestColumn[] = ['id', 'title', 'type', 'requesterName', 'createdAt', 'status'];
-    return this.list.status() === 'pending' ? [...base, 'actions'] : base;
+    const base: RequestColumn[] = ['id', 'title', 'type', 'requesterName', 'createdAt', 'status', 'actions'];
+    // return this.list.status() === 'pending' ? [...base, 'actions'] : base;
+    return base;
   });
   protected readonly decisionError = signal('');
   protected readonly decidingId = signal<number | null>(null);

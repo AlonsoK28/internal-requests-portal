@@ -8,6 +8,7 @@
         <mat-form-field appearance="outline">
             <mat-label>Estado</mat-label>
             <mat-select [value]="list.status()" (valueChange)="onStatus($event)">
+                <mat-option value="">Todos</mat-option>
                 <mat-option value="pending">Pendiente</mat-option>
                 <mat-option value="approved">Aprobada</mat-option>
                 <mat-option value="rejected">Rechazada</mat-option>

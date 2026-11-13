@@ -2,9 +2,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { of, Subject } from 'rxjs';
-import { ApiRequest, ConflictDialogComponent, RequestsApiService } from 'shared';
+import { ApiRequest, ConflictDialogComponent, RequestListStore, RequestsApiService } from 'shared';
 import { App } from './app';
 
 const pending: ApiRequest = { id: 67, title: 'Carpeta compartida de Finanzas', type: 'access',
@@ -23,6 +23,21 @@ describe('App', () => {
     await fixture.whenStable();
     expect(list).toHaveBeenCalledWith(expect.objectContaining({ status: 'pending', _page: 1 }));
     expect((fixture.nativeElement as HTMLElement).textContent).toContain('Aprobaciones');
+  });
+
+  it('shows all statuses when Todos is selected', async () => {
+    const list = vi.fn().mockReturnValue(of({ items: [pending], totalCount: 1 }));
+    await TestBed.configureTestingModule({
+      imports: [App],
+      providers: [provideRouter([]), { provide: RequestsApiService, useValue: { list } }],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    fixture.debugElement.injector.get(RequestListStore).setStatus('');
+    await fixture.whenStable();
+    expect(TestBed.inject(Router).url).toContain('status=all');
+    expect(list).toHaveBeenLastCalledWith(expect.objectContaining({ status: undefined }));
+    expect((fixture.nativeElement as HTMLElement).textContent).not.toContain('Acciones');
   });
 
   it('updates the table from the PATCH response without reloading the list', async () => {
