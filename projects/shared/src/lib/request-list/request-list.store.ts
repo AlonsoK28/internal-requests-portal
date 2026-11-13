@@ -35,8 +35,13 @@ export class RequestListStore {
         queryParamsHandling: 'merge', replaceUrl: true });
     }
 
-    this.searchChanges.pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
-      .subscribe(q => this.updateParams({ q: q || null, _page: null }));
+    this.searchChanges
+    .pipe(
+      debounceTime(300), 
+      distinctUntilChanged(), 
+      takeUntilDestroyed(this.destroyRef)
+    )
+    .subscribe(q => this.updateParams({ q: q || null, _page: null }));
 
     combineLatest([this.route.queryParamMap, this.reload.pipe(startWith(undefined))]).pipe(
       map(([params]) => {
