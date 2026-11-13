@@ -62,13 +62,13 @@ export class NewRequestDialog {
   readonly selected = signal<CatalogType | undefined>(undefined);
   readonly form = new FormGroup({
     type: new FormControl<RequestType | ''>('', { nonNullable: true, validators: Validators.required }),
-    title: new FormControl('', { nonNullable: true, validators: [requiredText, trimmedLength(5, 80)] }),
-    model: new FormControl('', { nonNullable: true }),
-    system: new FormControl('', { nonNullable: true }),
-    justification: new FormControl('', { nonNullable: true }),
-    destination: new FormControl('', { nonNullable: true }),
-    startDate: new FormControl('', { nonNullable: true }),
-    endDate: new FormControl('', { nonNullable: true }),
+    title: new FormControl<string>('', { nonNullable: true, validators: [requiredText, trimmedLength(5, 80)] }),
+    model: new FormControl<string>('', { nonNullable: true }),
+    system: new FormControl<string>('', { nonNullable: true }),
+    justification: new FormControl<string>('', { nonNullable: true }),
+    destination: new FormControl<string>('', { nonNullable: true }),
+    startDate: new FormControl<string>('', { nonNullable: true }),
+    endDate: new FormControl<string>('', { nonNullable: true }),
     amount: new FormControl<number | null>(null),
   }, { validators: dateOrder });
 

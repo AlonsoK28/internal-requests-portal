@@ -2,6 +2,18 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.6.
 
+## Como ejecutar devserver en host + remotes
+- ng s shell
+- ng s mfe-approvals
+- ng s mfe-requests
+> estando en la raiz del proyecto
+
+## Como ejecutar pruebas unitarias
+- ng s shell
+- ng s mfe-approvals
+- ng s mfe-requests
+> estando en la raiz del proyecto
+
 ## Development server
 
 To start a local development server, run:
