@@ -6,13 +6,18 @@ import { approvalsGuard, homeGuard, requestsGuard } from 'shared';
 @Component({ template: '' })
 class EmptyRoute {}
 
-function loadFederatedComponent(remoteName: string) {
+function loadFederatedComponent(remoteName: string, componentName = 'App') {
     // Development remote bundles reference ngDevMode directly; initialize it when the host does not.
     if (typeof ngDevMode === 'undefined') enableProdMode();
-    return loadRemoteModule(remoteName, './Component').then(m => m.App);
+    return loadRemoteModule(remoteName, './Component').then(m => m[componentName]);
 }
 
 export const routes: Routes = [
+    {
+        path: 'requests/:id',
+        canMatch: [requestsGuard],
+        loadComponent: () => loadFederatedComponent('mfe-requests', 'RequestDetailComponent')
+    },
     {
         path: 'requests',
         canMatch: [requestsGuard],

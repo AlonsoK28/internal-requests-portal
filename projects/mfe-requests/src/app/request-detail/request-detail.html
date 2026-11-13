@@ -1,0 +1,49 @@
+<section class="detail" aria-labelledby="detail-heading">
+    <a matButton routerLink="/requests">Volver al listado</a>
+    <h1 id="detail-heading">Detalle de solicitud</h1>
+    @if (loading()) {
+        <div class="message" role="status" aria-live="polite">
+            <mat-spinner diameter="28" aria-label="Cargando solicitud" />
+            <span>Cargando solicitud…</span>
+        </div>
+    } @else if (error()) {
+        <div class="message" role="alert">
+            <p>{{ error() }}</p>
+            <button matButton="filled" type="button" (click)="retry()">Reintentar</button>
+        </div>
+    } @else if (request(); as item) {
+        <mat-card appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>{{ item.title }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <dl>
+                    <dt>ID</dt><dd>{{ item.id }}</dd>
+                    <dt>Tipo</dt><dd>{{ item.type }}</dd>
+                    <dt>Solicitante</dt><dd>{{ item.requesterName }} (ID {{ item.requesterId }})</dd>
+                    <dt>Fecha de creación</dt><dd>{{ item.createdAt | date: 'medium' }}</dd>
+                    <dt>Última actualización</dt><dd>{{ item.updatedAt | date: 'medium' }}</dd>
+                    <dt>Estado</dt><dd>{{ item.status }}</dd>
+                    <dt>Versión</dt><dd>{{ item.version }}</dd>
+                    @if (item.amount !== undefined) {
+                        <dt>Monto</dt><dd>{{ item.amount | number: '1.2-2' }}</dd>
+                    }
+                    @switch (item.type) {
+                        @case ('equipment') {
+                            <dt>Modelo</dt><dd>{{ item.details.model }}</dd>
+                        }
+                        @case ('access') {
+                            <dt>Sistema</dt><dd>{{ item.details.system }}</dd>
+                            <dt>Justificación</dt><dd>{{ item.details.justification }}</dd>
+                        }
+                        @case ('travel') {
+                            <dt>Destino</dt><dd>{{ item.details.destination }}</dd>
+                            <dt>Inicio del viaje</dt><dd>{{ item.details.startDate | date: 'mediumDate' }}</dd>
+                            <dt>Fin del viaje</dt><dd>{{ item.details.endDate | date: 'mediumDate' }}</dd>
+                        }
+                    }
+                </dl>
+            </mat-card-content>
+        </mat-card>
+    }
+</section>

@@ -1,3 +1,13 @@
 .table-wrap { overflow-x: auto; }
 table { width: 100%; }
 .message { display: flex; align-items: center; gap: 1rem; padding: 1.5rem; }
+.detail-row { cursor: pointer; }
+.detail-row:hover { background: var(--mat-sys-surface-container); }
+.detail-row:focus-visible { outline: 2px solid var(--mat-sys-primary); outline-offset: -2px; }
+.title-cell { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.detail-button { opacity: 0; pointer-events: none; white-space: nowrap; }
+.detail-row:hover .detail-button,
+.detail-row:focus-within .detail-button { opacity: 1; pointer-events: auto; }
+@media (hover: none) {
+  .detail-button { opacity: 1; pointer-events: auto; }
+}

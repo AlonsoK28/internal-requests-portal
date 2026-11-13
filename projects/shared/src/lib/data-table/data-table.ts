@@ -19,7 +19,19 @@ export class DataTableComponent {
   readonly columns = input.required<readonly RequestColumn[]>();
   readonly loading = input(false);
   readonly error = input(false);
+  readonly seeDetail = input(false);
   readonly action = output<TableAction>();
+  readonly detail = output<number>();
   readonly retry = output<void>();
   protected readonly displayedColumns = computed(() => [...this.columns()]);
+
+  navigateToDetails(request: ApiRequest): void {
+    if (this.seeDetail()) this.detail.emit(request.id);
+  }
+
+  onRowKeydown(event: Event, request: ApiRequest): void {
+    if (event.target !== event.currentTarget) return;
+    event.preventDefault();
+    this.navigateToDetails(request);
+  }
 }

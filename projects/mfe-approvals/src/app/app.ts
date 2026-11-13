@@ -3,13 +3,22 @@ import { RouterOutlet } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { DataTableComponent, RequestColumn, RequestListStore, RequestStatus, RequestType, RequestsApiService, TableAction } from 'shared';
 
 @Component({
   selector: 'app-approvals',
-  imports: [DataTableComponent, MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule, MatPaginatorModule],
+  imports: [
+    DataTableComponent, 
+    MatFormFieldModule, 
+    MatInputModule, 
+    MatOptionModule, 
+    MatSelectModule, 
+    MatPaginatorModule,
+    MatIconModule
+  ],
   providers: [RequestListStore],
   templateUrl: './app.html',
   styleUrl: './app.scss',

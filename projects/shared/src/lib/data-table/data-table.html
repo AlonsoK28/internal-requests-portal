@@ -19,7 +19,16 @@
             </ng-container>
             <ng-container matColumnDef="title">
                 <th mat-header-cell *matHeaderCellDef scope="col">Título</th>
-                <td mat-cell *matCellDef="let request">{{ request.title }}</td>
+                <td mat-cell *matCellDef="let request">
+                    <span class="title-cell">
+                        <span>{{ request.title }}</span>
+                        @if (seeDetail()) {
+                            <button matButton="tonal" type="button" class="detail-button"
+                                [attr.aria-label]="'Ver detalle de solicitud ' + request.id"
+                                (click)="$event.stopPropagation(); navigateToDetails(request)">Ver detalle</button>
+                        }
+                    </span>
+                </td>
             </ng-container>
             <ng-container matColumnDef="type">
                 <th mat-header-cell *matHeaderCellDef scope="col">Tipo</th>
@@ -45,7 +54,14 @@
                 </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns()"></tr>
+            <tr mat-row
+                [class.detail-row]="seeDetail()"
+                [attr.tabindex]="seeDetail() ? 0 : null"
+                [attr.aria-label]="seeDetail() ? 'Ver detalle de solicitud ' + row.id : null"
+                (click)="navigateToDetails(row)"
+                (keydown.enter)="onRowKeydown($event, row)"
+                (keydown.space)="onRowKeydown($event, row)"
+                *matRowDef="let row; columns: displayedColumns()"></tr>
         </table>
     </div>
 }
