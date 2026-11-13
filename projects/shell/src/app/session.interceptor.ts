@@ -17,13 +17,9 @@ export const sessionInterceptor: HttpInterceptorFn = (request, next) => {
   return next(authenticatedRequest).pipe(catchError((error: unknown) => {
     if (error instanceof HttpErrorResponse) {
       if (error.status === 401 && !/\/auth\/login(?:\?|$)/.test(request.url)) {
-        const currentUrl = router.getCurrentNavigation()?.initialUrl.toString() ?? router.url;
-        const currentReturnUrl = router.parseUrl(currentUrl).queryParams['returnUrl'];
-        const destination = currentUrl.startsWith('/login') && typeof currentReturnUrl === 'string'
-          ? currentReturnUrl : currentUrl;
         session.clear();
         notice.clear();
-        void router.navigate(['/login'], { queryParams: { returnUrl: destination } });
+        void router.navigateByUrl('/login');
       } else if (error.status === 403) {
         notice.deny();
       }

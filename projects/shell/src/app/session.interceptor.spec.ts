@@ -53,7 +53,7 @@ describe('sessionInterceptor', () => {
     request.flush([]);
   });
 
-  it('clears the session and keeps the destination on a 401', async () => {
+  it('clears the session and redirects to login on a 401', async () => {
     await router.navigateByUrl('/requests?tab=open');
     const redirected = firstValueFrom(router.events.pipe(filter(event => event instanceof NavigationEnd)));
     let receivedError: unknown;
@@ -62,7 +62,7 @@ describe('sessionInterceptor', () => {
     await redirected;
     expect(receivedError).toBeInstanceOf(HttpErrorResponse);
     expect(session.isAuthenticated()).toBe(false);
-    expect(router.url).toBe('/login?returnUrl=%2Frequests%3Ftab%3Dopen');
+    expect(router.url).toBe('/login');
   });
 
   it('shows an access denied message on a 403 without navigating', async () => {

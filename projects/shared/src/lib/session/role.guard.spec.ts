@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { CanMatchFn, provideRouter, Router, UrlSegment, UrlTree } from '@angular/router';
+import { CanMatchFn, provideRouter, Router, UrlTree } from '@angular/router';
 import { LoginResponse, UserRole } from '../api/api.models';
-import { allowedDestination, approvalsGuard, homeGuard, landingPath, requestsGuard } from './role.guard';
+import { approvalsGuard, homeGuard, landingPath, requestsGuard } from './role.guard';
 import { SessionStore } from './session.store';
 
 const snapshot = {} as Parameters<CanMatchFn>[2];
@@ -20,13 +20,13 @@ describe('role guards', () => {
 
   afterEach(() => TestBed.inject(SessionStore).clear());
 
-  it('redirects anonymous users to root with the requested destination', () => {
+  it('redirects anonymous users to root', () => {
     const router = TestBed.inject(Router);
     const result = TestBed.runInInjectionContext(() => requestsGuard(
-      { path: 'requests' }, [new UrlSegment('requests', {})], snapshot,
+      { path: 'requests' }, [], snapshot,
     ));
     expect(router.serializeUrl(result as UrlTree))
-      .toBe('/?returnUrl=%2Frequests');
+      .toBe('/');
   });
 
   it.each(['employee', 'approver'] as const)('allows %s to open requests', role => {
@@ -44,13 +44,9 @@ describe('role guards', () => {
     expect(TestBed.runInInjectionContext(() => approvalsGuard({ path: 'approvals' }, [], snapshot))).toBe(true);
   });
 
-  it('uses a return URL only when the role can access it', () => {
+  it('uses the role to choose the landing path', () => {
     expect(landingPath('employee')).toBe('/requests');
     expect(landingPath('approver')).toBe('/approvals');
-    expect(allowedDestination('/requests?page=2', 'employee')).toBe('/requests?page=2');
-    expect(allowedDestination('/approvals', 'employee')).toBeNull();
-    expect(allowedDestination('/approvals', 'approver')).toBe('/approvals');
-    expect(allowedDestination('//evil.example', 'approver')).toBeNull();
   });
 
   it('keeps anonymous users at home and redirects authenticated users by role', () => {

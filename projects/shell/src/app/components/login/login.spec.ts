@@ -65,7 +65,7 @@ describe('Login', () => {
     expect(TestBed.inject(Router).url).toBe('/approvals');
   });
 
-  it('returns to the requested URL after login', async () => {
+  it('ignores an old return URL and redirects by role after login', async () => {
     await TestBed.inject(Router).navigateByUrl('/login?returnUrl=%2Frequests%3Ftab%3Dopen');
     fixture.componentInstance.email.setValue('ana@demo.com');
     fixture.componentInstance.password.setValue('Demo123!');
@@ -75,7 +75,7 @@ describe('Login', () => {
       user: { id: 1, name: 'Ana', email: 'ana@demo.com', role: 'employee', department: 'Finanzas' },
     });
     await fixture.whenStable();
-    expect(TestBed.inject(Router).url).toBe('/requests?tab=open');
+    expect(TestBed.inject(Router).url).toBe('/requests');
   });
 
   it('does not submit invalid fields', () => {

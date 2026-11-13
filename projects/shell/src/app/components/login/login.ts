@@ -13,10 +13,10 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 // shared
 import { AuthApiService, SessionStore } from 'shared';
-import { allowedDestination, landingPath } from 'shared';
+import { landingPath } from 'shared';
 
 
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -37,7 +37,6 @@ export class Login {
   private readonly authApi = inject(AuthApiService);
   readonly session = inject(SessionStore);
   private readonly router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
 
   readonly email = new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] });
   readonly password = new FormControl('', { nonNullable: true, validators: [Validators.required] });
@@ -61,9 +60,7 @@ export class Login {
         this.submitting.set(false);
         const role = this.session.role();
         if (role) {
-          const destination = allowedDestination(this.route.snapshot.queryParamMap.get('returnUrl'), role)
-            ?? landingPath(role);
-          void this.router.navigateByUrl(destination);
+          void this.router.navigateByUrl(landingPath(role));
         }
       },
       error: (error: unknown) => {
